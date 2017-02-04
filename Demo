@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<htm>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="style.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="jquery.mousewheel.js"></script>
+<script src="http://d3js.org/d3.v3.js"></script>
+
+<style>
+    body {
+      padding: 10px;
+      background: #337a35;
+    }
+    div {
+      background: #337a35;
+      margin-bottom: 10px;
+      padding: 7px;
+      color: #dcfadc;
+      font-family: Arial;
+      font-size: 12px; 
+    }
+    #page-wrap {
+    	width: 100%;
+    }
+</style>
+<script>
+	var drawn = false;
+	function isScrolledInView(el) {
+		var elemRight = el[0].getBoundingClientRect().right;
+		var elemLeft = el[0].getBoundingClientRect().left;
+		var isVisible = elemLeft <= 600;
+		return isVisible;
+	}
+	function makeChart() {
+		var distances = [0, 2.23, 2.39, 2.59, 2.77, 3.05];
+
+		d3.select('#chart1').selectAll('#chart')
+  		.data(distances)
+  		.enter()
+    	.append('div')
+    	.html('...')
+    	.style('background-color', '#11cd77')
+    	.style('color', '#059050')
+    	.style('width', '10px')
+    	.style('opacity', 0)
+    	.on("mouseover", function(){
+      		d3.select(this).transition().duration(300)
+        	.style("background-color", "#48f8ab");
+    	})
+    	.on("mouseout", function(){
+      		d3.select(this).transition().duration(300)
+        	.style("background-color", "#333");
+        })
+    	.transition()
+      	.delay(function(d, i) { return i * 300 })
+      	.duration(300)    
+      	.style('width', function(d) { return (d * 150) + 'px'; })
+      	.style('opacity', 1)
+      	.text(function(d) { return d + ' %'; });
+      }
+      
+	$(function(){
+		$("#page-wrap").wrapInner("<table cellspacing='30'><tr>");
+		$(".post").wrap("<td></td>");
+		$("body").mousewheel(function(event, delta) {
+			this.scrollLeft -= (delta * 30);
+			event.preventDefault();
+			if (drawn == false) {
+				if (isScrolledInView($("#chart"))) {
+					makeChart();
+					drawn = true;
+				}
+			}
+		});   
+	});
+	</script>
+</head>
+<body>
+<div id="page-wrap">
+		
+		<div class="post">
+			<h2>Resume</h2>
+			<p>By Nicole Francisco</p>
+			<p>email: franciscon@knights.ucf.edu</p>			
+		</div>
+		
+		<div class="post">
+			<h2>Education</h2>
+			<h3>University of Central Florida</h3>
+			<p>Date: 2013-current</p>	
+			<p>Degree to come: BA in Digital Media: Web Design</p>
+			
+			<h3>Seminole State College</h3>
+			<p>Date: 2010-2013</p>	
+			<p>Degree: Digital Media: Graphic Design</p>
+			
+			<h3>Military IT School</h3>
+			<p>Date: 2003-2003</p>	
+			<p>Completed tech training</p>
+		</div>
+		
+		<div class="post">
+			<h2>Work</h2>
+			<p>Blockbuster</p>
+			<p>Children's Place</p>
+			<p>United States Navy</p>
+		</div>
+				
+		<div class="post" id="chart1">
+			<h2>Skills</h2>
+			<div id="chart"></div>
+		</div>
+		
+		<div class="post">
+			<h2>Other Skills</h2>
+			<p>PhotoShop</p>
+			<p>Illustrator</p>
+			<p>FinalCut Pro</p>
+			<p>Dreamweaver</p>
+			<p>Microsoft Office</p>
+		</div>
+	
+	</div>
+</body
+</html>
